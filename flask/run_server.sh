@@ -1,10 +1,15 @@
 #!/bin/bash
 
-if [ $# -lt 1 ]; then
-  echo 'USAGE: ./run_server.sh [model]'
+if [ $# -lt 2 ]; then
+  echo 'USAGE: ./run_server.sh [model] [mode]'
   exit 1
 fi
 
 model=$1
+mode=$2
 
-FLASK_ENV=development python3 app.py --model $model --gpu-mode
+if [ $mode = "cpu" ]; then
+  FLASK_DEBUG=development python3 app.py --model $model
+else
+  FLASK_DEBUG=development python3 app.py --model $model --gpu
+fi

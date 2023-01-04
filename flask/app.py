@@ -7,23 +7,39 @@ import torchvision.models as models
 import torchvision.transforms as transforms
 
 from PIL import Image
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, jsonify
 
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('--model', type=str, default='resnet18')
 parser.add_argument('--gpu-mode', action='store_true')
 
 args = parser.parse_args()
-model = models.__dict__[args.model]()
+model = models.__dict__[args.model](pretrained=True)
 
 app = Flask(__name__)
 
 if args.gpu_mode:
+    torch.cuda.set_device(0)
     model = model.cuda()
 
+model.eval()
+
+normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
+transform = transforms.Compose([transforms.Resize(256),
+                                transforms.CenterCrop(224),
+                                transforms.ToTensor(),
+                                normalize])
+
+with open('imagenet_labels.json') as f:
+    labels = json.load(f)
+
+
+def class_id_to_label(i):
+    return labels[i]
+
+
 def transform_image(byte_imgs):
-    transform = transforms.Compose([transforms.Resize(224),
-                                    transforms.ToTensor()])
     image = Image.open(io.BytesIO(byte_imgs))
     return transform(image).unsqueeze(0)
 
@@ -31,17 +47,16 @@ def transform_image(byte_imgs):
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-        byte_imgs = request.files('image').read()
+        byte_imgs = request.files['image'].read()
         input_imgs = transform_image(byte_imgs)
+        if args.gpu_mode:
+            input_imgs = input_imgs.cuda()
         outputs = model(input_imgs)
-        index = str(outputs.max(1).item())
+        index = int(outputs.max(1)[0].item())
+        result = class_id_to_label(index)
+        print('[DEBUG] prediction:', result)
+        return jsonify({'result': result})
 
-        res = {
-            'class_id' : index
-        }
-        res = make_response(json)
-        res.headers['Content-Type'] = 'application/json'
-        return res
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='127.0.0.1', port='50000')

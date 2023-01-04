@@ -11,9 +11,13 @@ args = parser.parse_args()
 
 def send_data(url, args):
     files = {
-        'file' : open(args.image, 'rb')
+        'image' : open(args.image, 'rb')
     }
-    res = requests.post(url)
+    res = requests.post(url, files=files)
+    return res
 
-url = args.url + ':' + args.port
-print('[DEBUG]', send_data(url, args))
+url = "http://" + args.url + ':' + args.port + "/predict"
+print('[DEBUG] send url:', url)
+
+result = send_data(url, args)
+print('[DEBUG]', result.json())
