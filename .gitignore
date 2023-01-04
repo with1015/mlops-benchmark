@@ -1,2 +1,5 @@
 flask/.bash_history
 flask/.nv
+flask/data
+
+*.log
