@@ -47,7 +47,7 @@ def transform_image(byte_imgs):
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-        byte_imgs = request.files['image'].read()
+        byte_imgs = request.files['file'].read()
         input_imgs = transform_image(byte_imgs)
         if args.gpu_mode:
             input_imgs = input_imgs.cuda()

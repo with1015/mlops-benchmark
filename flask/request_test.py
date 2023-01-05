@@ -11,7 +11,7 @@ args = parser.parse_args()
 
 def send_data(url, args):
     files = {
-        'image' : open(args.image, 'rb')
+        'file' : open(args.image, 'rb')
     }
     res = requests.post(url, files=files)
     return res
