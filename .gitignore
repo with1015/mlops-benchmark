@@ -2,5 +2,8 @@ flask/.bash_history
 flask/.nv
 flask/data
 
+mlflow/*_pretrained
+mlflow/data
+
 *.log
 *.jmx
