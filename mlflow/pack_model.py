@@ -1,13 +1,16 @@
 import argparse
 import json
+import base64
 import torch
 import mlflow
 import mlflow.pyfunc
+import mlflow.pytorch
 
 import torchvision.models as models
 import torchvision.transforms as transforms
 
 from PIL import Image
+from io import BytesIO
 
 parser = argparse.ArgumentParser(description="")
 parser.add_argument('--gpu-mode', action="store_true")
@@ -31,12 +34,8 @@ transform = transforms.Compose([transforms.Resize(256),
 with open('./imagenet_labels.json') as f:
     labels = json.load(f)
 
-
 def class_id_to_label(i):
     return labels[i]
-
-def transform_image(imgs):
-    return transform(imgs).unsqueeze(0)
 
 
 class PytorchServingAritifact(mlflow.pyfunc.PythonModel):
@@ -44,20 +43,26 @@ class PytorchServingAritifact(mlflow.pyfunc.PythonModel):
     def __init__(self, model):
         self.model = model
 
-    def predict(self, context, file_streams):
-        for fs in file_streams:
-            imgs = Image.open(fs).convert('RGB')
-        input_imgs = transform(imgs)
+    def predict(self, context, input_json):
+        imgs = self._recover_image(input_json)
+        input_imgs = self._transform_image(imgs)
         if args.gpu_mode:
             input_imgs = input_imgs.cuda()
-        output = self.model(input_imgs)
+        outputs = self.model(input_imgs)
         index = int(outputs.max(1)[0].item())
         result = class_id_to_label(index)
         print("[DEBUG] prediction:", result)
         return [result]
 
+    def _recover_image(self, base_data):
+        img = Image.open(BytesIO(base64.b64decode(base_data)))
+        return img.convert('RGB')
+
+    def _transform_image(self, imgs):
+        return transform(imgs).unsqueeze(0)
+
 
 if __name__ == "__main__":
-    model_path = "Resnet_18_pretrained"
+    model_path = args.model + "_pretrained"
     wrapped_model = PytorchServingAritifact(model)
     mlflow.pyfunc.save_model(model_path, python_model=wrapped_model)
