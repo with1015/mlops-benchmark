@@ -22,7 +22,7 @@ if args.gpu_mode:
     torch.cuda.set_device(0)
     model = model.cuda()
 
-model.eval()
+model = model.eval()
 
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                  std=[0.229, 0.224, 0.225])
@@ -59,4 +59,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port='50000')
+    app.run(host='127.0.0.1', port='50000', use_reloader=False)
