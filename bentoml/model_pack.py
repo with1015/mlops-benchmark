@@ -13,10 +13,8 @@ from bentoml.adapters import FileInput, JsonOutput
 from bentoml.frameworks.pytorch import PytorchModelArtifact
 
 model = models.__dict__['resnet18'](pretrained=True)
-
 torch.cuda.set_device(0)
 model = model.cuda()
-
 model.eval()
 
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -42,10 +40,9 @@ def transform_image(imgs):
 @artifacts([PytorchModelArtifact('model')])
 class PredictServing(BentoService):
 
-    @api(input=FileInput(), batch=True)
+    @api(input=FileInput(), batch=False)
     def predict(self, file_streams):
-        for fs in file_streams:
-            imgs = Image.open(fs).convert('RGB')
+        imgs = Image.open(file_streams).convert('RGB')
         input_imgs = transform_image(imgs)
         input_imgs = input_imgs.cuda()
         outputs = self.artifacts.model(input_imgs)

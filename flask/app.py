@@ -14,9 +14,9 @@ parser.add_argument('--model', type=str, default='resnet18')
 parser.add_argument('--gpu-mode', action='store_true')
 
 args = parser.parse_args()
-model = models.__dict__[args.model](pretrained=True)
 
 app = Flask(__name__)
+model = models.__dict__[args.model](pretrained=True)
 
 if args.gpu_mode:
     torch.cuda.set_device(0)
