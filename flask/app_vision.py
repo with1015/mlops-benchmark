@@ -6,6 +6,8 @@ import torch
 import torchvision.models as models
 import torchvision.transforms as transforms
 
+import torch.autograd.profiler as profiler
+
 from PIL import Image
 from flask import Flask, request, make_response, jsonify
 
@@ -16,12 +18,12 @@ parser.add_argument('--gpu-mode', action='store_true')
 args = parser.parse_args()
 
 app = Flask(__name__)
+
 model = models.__dict__[args.model](pretrained=True)
 
 if args.gpu_mode:
     torch.cuda.set_device(0)
     model = model.cuda()
-
 model = model.eval()
 
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -47,6 +49,7 @@ def transform_image(byte_imgs):
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
+        global model
         byte_imgs = request.files['file'].read()
         input_imgs = transform_image(byte_imgs)
         if args.gpu_mode:
@@ -59,4 +62,6 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port='50000', use_reloader=False)
+    app.run(host='127.0.0.1', port='51234',
+            use_reloader=False,
+            threaded=False)
