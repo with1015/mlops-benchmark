@@ -7,3 +7,4 @@ mlflow/data
 
 *.log
 *.jmx
+__pycache__
