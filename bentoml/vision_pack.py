@@ -12,8 +12,8 @@ from bentoml import env, artifacts, api, BentoService
 from bentoml.adapters import FileInput, JsonOutput
 from bentoml.frameworks.pytorch import PytorchModelArtifact
 
-model = models.__dict__['resnet18'](pretrained=True)
 torch.cuda.set_device(0)
+model = models.__dict__['resnet101'](pretrained=True)
 model = model.cuda()
 model.eval()
 

@@ -4,5 +4,5 @@ MAINTAINER Hyunjoon Jeong <with1015@unist.ac.kr>
 WORKDIR /workspace
 COPY ./requirements_gpt.txt /workspace
 
-RUN pip3 install -r requirements_vision.txt --use-feature=2020-resolver
+RUN pip3 install -r requirements_gpt.txt --use-feature=2020-resolver
 EXPOSE 50000

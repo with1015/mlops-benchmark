@@ -1,9 +1,14 @@
 #!/bin/bash
 
-bind_path=/home/mlops/mlops/bentoml
-image=bentoml-benchmark
+if [ $# -lt 2 ]; then
+  echo "[USAGE] ./run_bentoml_benchmark.sh [Image] [Name]"
+  exit 1
+fi
 
-docker run -d -it --name $1 \
+bind_path=/home/mlops/mlops/bentoml
+image=$1
+
+docker run -d -it --name $2 \
   --gpus "device=0" \
   --network=host \
   --mount type=bind,source=${bind_path},target=/workspace \

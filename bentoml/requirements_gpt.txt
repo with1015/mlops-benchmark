@@ -1,0 +1,4 @@
+bentoml
+accelerate
+transformers
+flax
