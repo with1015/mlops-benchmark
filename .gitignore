@@ -8,3 +8,5 @@ mlflow/data
 *.log
 *.jmx
 __pycache__
+
+test_data

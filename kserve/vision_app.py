@@ -31,9 +31,9 @@ class CustomModel(kserve.Model):
                 std=[0.229, 0.224, 0.225])
         self.transform = transforms.Compose([
                 transforms.Resize(256),
-                transforms,CenterCrop(224),
+                transforms.CenterCrop(224),
                 transforms.ToTensor(),
-                normalize])
+                self.normalize])
         if args.gpu_mode:
             self.model = self.model.cuda()
         with open('./imagenet_labels.json') as f:
