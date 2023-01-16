@@ -26,6 +26,7 @@ class CustomModel(kserve.Model):
         super().__init__(name)
         self.name = name
         self.model = model
+        self.args = args
         self.normalize = transforms.Normalize(
                 mean=[0.485, 0.456, 0.406],
                 std=[0.229, 0.224, 0.225])
@@ -41,8 +42,11 @@ class CustomModel(kserve.Model):
 
     def preprocess(self, request: Dict) -> Dict:
         data = request['data']
-        img = Image.open(BytesIO(base64.b64decode(data)))
-        return {"img", img}
+        img = Image.open(BytesIO(base64.b64decode(data))).convert("RGB")
+        img = self.transform(img)
+        if self.args.gpu_mode:
+            img = img.cuda()
+        return {"img": img.unsqueeze(0)}
 
     def predict(self, input_img: Dict) -> Dict:
         img = input_img["img"]
@@ -53,6 +57,7 @@ class CustomModel(kserve.Model):
     def postprocess(self, index: Dict) -> Dict:
         idx = index["index"]
         result = self.labels[idx]
+        print(result)
         return {'result': result}
 
 
