@@ -1,9 +1,0 @@
-apiVersion: serving.kserve.io/v1beta1
-kind: InferenceService
-metadata:
-  name: vision-kserve
-spec:
-  predictor:
-    containers:
-      - name: vision-kserve
-        image: with1015/vision-kserve:latest

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kserve-resnet18
+  labels:
+    app: myapp
+    version: canary
+spec:
+  replicas: 8
+  selector:
+    matchLabels:
+      app: myapp
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: canary
+    spec:
+      containers:
+      - name: testapp
+        image: with1015/kserve-resnet18
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 51234

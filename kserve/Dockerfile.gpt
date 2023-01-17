@@ -1,0 +1,7 @@
+FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-devel
+
+WORKDIR /workspace
+COPY ./* /workspace/
+RUN pip install --no-cache-dir -r ./requirements.txt --use-feature=2020-resolver
+
+CMD ["python", "gpt_app.py", "--gpu-mode", "--model", "gpt2-medium"]
