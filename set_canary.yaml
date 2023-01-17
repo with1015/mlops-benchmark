@@ -9,7 +9,7 @@ spec:
   ports:
   - port: 50001
     protocol: TCP
-    targetPort: 51234
+    targetPort: 8080
   selector:
     app: myapp
   type: NodePort

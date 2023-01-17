@@ -1,6 +1,6 @@
-import io
 import argparse
 import json
+import base64
 
 import torch
 import torchvision.models as models
@@ -8,6 +8,7 @@ import torchvision.transforms as transforms
 
 import torch.autograd.profiler as profiler
 
+from io import BytesIO
 from PIL import Image
 from flask import Flask, request, make_response, jsonify
 
@@ -42,7 +43,8 @@ def class_id_to_label(i):
 
 
 def transform_image(byte_imgs):
-    image = Image.open(io.BytesIO(byte_imgs))
+    #image = Image.open(io.BytesIO(byte_imgs))
+    image = Image.open(BytesIO(base64.b64decode(byte_imgs))).convert("RGB")
     return transform(image).unsqueeze(0)
 
 
@@ -50,7 +52,8 @@ def transform_image(byte_imgs):
 def predict():
     if request.method == 'POST':
         global model
-        byte_imgs = request.files['file'].read()
+        #byte_imgs = request.files['file'].read()
+        byte_imgs = request.get_json()['data']
         input_imgs = transform_image(byte_imgs)
         if args.gpu_mode:
             input_imgs = input_imgs.cuda()
