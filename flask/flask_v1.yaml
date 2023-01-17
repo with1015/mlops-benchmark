@@ -22,4 +22,4 @@ spec:
         image: with1015/flask-resnet18
         imagePullPolicy: Never
         ports:
-        - containerPort: 51234
+        - containerPort: 8080
