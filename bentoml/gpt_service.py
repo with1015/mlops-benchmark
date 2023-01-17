@@ -4,7 +4,7 @@ import transformers
 
 from bentoml.io import Text, JSON
 
-model_name = "gpt2"
+model_name = "gpt2-medium"
 model = bentoml.transformers.load_model(model_name+":latest")
 
 svc = bentoml.Service("gpt2")

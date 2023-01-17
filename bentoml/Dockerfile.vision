@@ -2,7 +2,7 @@ FROM pytorch/pytorch:1.9.0-cuda11.1-cudnn8-devel
 MAINTAINER Hyunjoon Jeong <with1015@unist.ac.kr>
 
 WORKDIR /workspace
-COPY ./requirements_gpt.txt /workspace
+COPY ./requirements_vision.txt /workspace
 
 RUN pip3 install -r requirements_vision.txt --use-feature=2020-resolver
 EXPOSE 50000

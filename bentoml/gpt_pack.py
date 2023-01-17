@@ -1,7 +1,7 @@
 import bentoml
 from transformers import pipeline, set_seed
 
-model_name = 'gpt2'
+model_name = 'gpt2-medium'
 device = 0
 #device = -1
 
