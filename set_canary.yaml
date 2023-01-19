@@ -7,9 +7,13 @@ metadata:
   namespace: default
 spec:
   ports:
-  - port: 50001
-    protocol: TCP
-    targetPort: 8080
+    - name: http
+      protocol: TCP
+      port: 50001
+      targetPort: 8080
   selector:
     app: myapp
-  type: NodePort
+  externalIPs:
+    - 192.168.219.100
+
+
