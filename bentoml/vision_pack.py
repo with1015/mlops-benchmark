@@ -13,7 +13,7 @@ from bentoml.adapters import FileInput, JsonOutput
 from bentoml.frameworks.pytorch import PytorchModelArtifact
 
 torch.cuda.set_device(0)
-model = models.__dict__['resnet50'](pretrained=True)
+model = models.__dict__['resnet18'](pretrained=True)
 model = model.cuda()
 model.eval()
 
@@ -63,8 +63,6 @@ class PredictServing(BentoService):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="")
-    args = parser.parse_args()
     svc = PredictServing()
     svc.pack('model', model)
     svc.save()

@@ -62,21 +62,6 @@ def predict():
         return jsonify({'result': result})
 
 
-@app.route('/v1/models/vision:predict', methods=['POST'])
-def predict_canary():
-    if request.method == 'POST':
-        global model
-        byte_imgs = request.get_json()['data']
-        input_imgs = transform_image(byte_imgs)
-        if args.gpu_mode:
-            input_imgs = input_imgs.cuda()
-        outputs = model(input_imgs)
-        index = int(outputs.max(1)[0].item())
-        result = class_id_to_label(index)
-        print('[DEBUG] prediction:', result)
-        return jsonify({'result': result})
-
-
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port='8080',
             use_reloader=False,

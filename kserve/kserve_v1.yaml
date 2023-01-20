@@ -3,22 +3,22 @@ kind: Deployment
 metadata:
   name: kserve-resnet18-cpu
   labels:
-    app: myapp
+    app: canary-app
     version: canary
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: myapp
+      app: canary-app
       version: canary
   template:
     metadata:
       labels:
-        app: myapp
+        app: canary-app
         version: canary
     spec:
       containers:
-      - name: testapp
+      - name: kserve-resnet18-cpu
         image: with1015/kserve-resnet18-cpu
         imagePullPolicy: Never
         ports:

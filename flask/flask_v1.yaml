@@ -3,22 +3,22 @@ kind: Deployment
 metadata:
   name: flask-resnet18
   labels:
-    app: myapp
+    app: canary-app
     version: stable
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: myapp
+      app: canary-app
       version: stable
   template:
     metadata:
       labels:
-        app: myapp
+        app: canary-app
         version: stable
     spec:
       containers:
-      - name: testapp
+      - name: flask-resnet18-gpu
         image: with1015/flask-resnet18
         imagePullPolicy: Never
         ports:

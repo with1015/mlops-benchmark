@@ -7,8 +7,9 @@ fi
 
 bind_path=/home/mlops/mlops/bentoml
 image=$1
+name=$2
 
-docker run -d -it --name $2 \
+docker run -d -it --name $name \
   --gpus "device=0" \
   --network=host \
   --mount type=bind,source=${bind_path},target=/workspace \

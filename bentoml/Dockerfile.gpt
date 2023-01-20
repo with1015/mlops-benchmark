@@ -6,3 +6,5 @@ COPY ./requirements_gpt.txt /workspace
 
 RUN pip3 install -r requirements_gpt.txt --use-feature=2020-resolver
 EXPOSE 50000
+
+CMD ["python", "gpt_pack.py"]
