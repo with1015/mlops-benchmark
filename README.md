@@ -11,8 +11,8 @@
 
 #### Example for ResNet-18 with Flask
 ```
-cd ~/mlops/flask
+cd ~/mlops-benchamrk/flask
 docker build -f Docker.vision --tag with1015/flask-resnet18-gpu .
-cd ~/mlops
+cd ~/mlops-benchamrk
 ./run_flask_benchmark.sh with1015/flask-resnet18-gpu flask-test
 ```
