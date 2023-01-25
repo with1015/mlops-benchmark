@@ -8,4 +8,4 @@ RUN pip3 install -r requirements_vision.txt --use-feature=2020-resolver
 EXPOSE 50000
 
 CMD ["python", "vision_pack.py"]
-CMD ["bentoml", "serve", "PredictServing:latest"]
+CMD ["bentoml", "serve", "PredictServing:latest", "--port", "5000"]

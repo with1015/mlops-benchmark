@@ -25,7 +25,7 @@ transform = transforms.Compose([transforms.Resize(256),
                                 normalize])
 
 with open('./imagenet_labels.json') as f:
-    labels = json.load(f)
+        labels = json.load(f)
 
 
 @env(infer_pip_packages=True)
@@ -47,16 +47,16 @@ class PredictServing(BentoService):
     @api(input=FileInput(), batch=False)
     def predict(self, file_streams):
         imgs = Image.open(file_streams).convert('RGB')
-        input_imgs = transform_image(imgs)
+        input_imgs = self._transform_image(imgs)
         input_imgs = input_imgs.cuda()
         outputs = self.artifacts.model(input_imgs)
         index = int(outputs.max(1)[0].item())
-        result = class_id_to_label(index)
+        result = self._class_id_to_label(index)
         print("[DEBUG] prediction:", result)
         return [result]
 
     def _class_id_to_label(self, i):
-        return self.labels[i]
+        return labels[i]
 
     def _transform_image(self, imgs):
         return transform(imgs).unsqueeze(0)
