@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: http-send
+  labels:
+    app: http-send
+spec:
+  containers:
+  - image: with1015/test-send:latest
+    imagePullPolicy: IfNotPresent
+    name: http-send

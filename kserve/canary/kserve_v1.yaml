@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kserve-resnet18-cpu
+  labels:
+    app: canary
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: canary
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: canary
+        version: v1
+    spec:
+      containers:
+      - image: with1015/kserve-resnet18-cpu
+        imagePullPolicy: IfNotPresent
+        name: kserve-resnet18-cpu

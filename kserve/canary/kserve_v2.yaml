@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kserve-resnet18-gpu
+  labels:
+    app: canary
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: canary
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: canary
+        version: v2
+    spec:
+      containers:
+      - image: with1015/kserve-resnet18
+        imagePullPolicy: IfNotPresent
+        name: kserve-resnet18-gpu
